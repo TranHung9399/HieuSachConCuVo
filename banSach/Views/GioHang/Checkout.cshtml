@@ -1,0 +1,80 @@
+﻿@model banSach.Models.CheckoutViewModel
+@{
+    ViewBag.Title = "Xác nhận đơn hàng";
+}
+
+<h2 class="mb-4">Xác nhận đơn hàng</h2>
+
+<h4>Thông tin khách hàng</h4>
+@using (Html.BeginForm("DatHang", "GioHang", FormMethod.Post))
+{
+    <div class="row mb-3">
+        <div class="col-md-6 mb-2">
+            <label for="HoTen" class="form-label">Họ tên</label>
+            <input type="text" name="HoTen" class="form-control" id="HoTen" value="@Model.HoTen" required />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
+            <input type="text" name="SoDienThoai" class="form-control" id="SoDienThoai" value="@Model.SoDienThoai" required />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" name="Email" class="form-control" id="Email" value="@Model.Email" required />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label for="DiaChi" class="form-label">Địa chỉ</label>
+            <input type="text" name="DiaChi" class="form-control" id="DiaChi" value="@Model.DiaChi" required />
+        </div>
+    </div>
+
+    <h4 class="mt-4">Danh sách sản phẩm</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Sách</th>
+                <th>Số lượng</th>
+                <th>Đơn giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                decimal tongTien = 0;
+            }
+            @foreach (var item in Model.CartItems)
+            {
+                var thanhTien = (item.SoLuong ?? 0) * (item.DonGia ?? 0);
+                tongTien += thanhTien;
+                <tr>
+                    <td>@item.Sach.TenSach</td>
+                    <td>@item.SoLuong</td>
+                    <td>@String.Format("{0:#,##0} đ", item.DonGia)</td>
+                    <td>@String.Format("{0:#,##0} đ", thanhTien)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="3" class="text-right font-weight-bold">Tổng tiền:</td>
+                <td class="text-danger font-weight-bold">@String.Format("{0:#,##0} đ", tongTien)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-sm-3">
+            <label for="PhuongThucThanhToan" class="col-form-label fw-bold">Phương thức thanh toán</label>
+        </div>
+        <div class="col-sm-9">
+            @Html.DropDownList("PhuongThucThanhToan", new SelectList(
+                new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Thanh toán tiền mặt", Value = "1" },
+                    new SelectListItem { Text = "Chuyển khoản", Value = "2" }
+                }, "Value", "Text"), "-- Chọn phương thức thanh toán --", new { @class = "form-control form-control-lg", id = "PhuongThucThanhToan" })
+        </div>
+    </div>
+
+    <div class="text-right mt-3">
+        <a href="@Url.Action("Index", "GioHang")" class="btn btn-secondary">Quay lại giỏ hàng</a>
+        <button type="submit" class="btn btn-primary">Xác nhận đặt hàng</button>
+    </div>
+}
