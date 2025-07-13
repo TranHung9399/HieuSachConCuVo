@@ -256,44 +256,7 @@
         }
     </style>
     @section Scripts {
-        <script>
-            $(document).ready(function () {
-                $('.btnAddCart').click(function (e) {
-                    e.preventDefault();
-                    var masach = $(this).data('masach');
-                    var url = "/GioHang/ThemGiohangAjax";
-                    var qty = 1; // Số lượng mặc định
-                    $.ajax({
-                        url: url,
-                        type: "POST",
-                        data: { iMasach: masach, qty: qty },
-                        success: function (res) {
-                            showCustomToast('Đã thêm sách vào giỏ hàng!');
-                            if (res.tongsoluong !== undefined) {
-                                $('.total-count').text(res.tongsoluong);
-                                $('.total-count1').text(res.tongsoluong);
-                            }
-                        },
-                        error: function () {
-                            alert('Có lỗi xảy ra!');
-                        }
-                    });
-                });
-                $('#sortSelect').change(function () {
-                    var sort = $(this).val();
-                    var url = new URL(window.location.href);
-                    url.searchParams.set('sort', sort);
-                    window.location.href = url.toString();
-                });
-                $(document).ready(function () {
-                    var urlParams = new URLSearchParams(window.location.search);
-                    var sort = urlParams.get('sort');
-                    if (sort) {
-                        $('#sortSelect').val(sort);
-                    }
-                });
-            });
-        </script>
+        <script src="~/Scripts/book-common.js"></script>
     }
 
     <style>

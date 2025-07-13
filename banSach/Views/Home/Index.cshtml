@@ -499,32 +499,8 @@ keyframes fadeInUp {
     });
 </script>
 @section Scripts {
-	<script>
-        $(document).ready(function () {
-            $('.btnAddCart').click(function (e) {
-                e.preventDefault();
-                var masach = $(this).data('masach');
-                var url = "/GioHang/ThemGiohangAjax";
-                var qty = 1; // Số lượng mặc định
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: { iMasach: masach, qty: qty },
-                    success: function (res) {
-                        showCustomToast('Đã thêm sách vào giỏ hàng!');
-                        if (res.tongsoluong !== undefined) {
-                            $('.total-count').text(res.tongsoluong);
-                            $('.total-count1').text(res.tongsoluong);
-                        }
-                    },
-                    error: function () {
-                        alert('Có lỗi xảy ra!');
-                    }
-                });
-            });
-        });
-    </script>
-	<script>
+    <script src="~/Scripts/book-common.js"></script>
+    <script>
     $(function(){
         @if (TempData["Success"] != null)
         {
