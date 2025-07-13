@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Owin.Security;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace banSach.Controllers
 {
@@ -173,6 +176,58 @@ return RedirectToAction("Index", "Home");
 
             // Chuyển hướng về trang đăng nhập
             return RedirectToAction("Index", "Dangnhap");
+        }
+
+        // Đăng nhập Google
+        public void GoogleLogin()
+        {
+            HttpContext.GetOwinContext().Authentication.Challenge(
+                new AuthenticationProperties { RedirectUri = Url.Action("GoogleCallback", "Dangnhap") },
+                "Google");
+        }
+
+        // Callback từ Google
+        public ActionResult GoogleCallback()
+        {
+            try
+            {
+                var claimsIdentity = User.Identity as ClaimsIdentity;
+                if (claimsIdentity == null || !claimsIdentity.IsAuthenticated)
+                {
+                    TempData["Error"] = "Đăng nhập Google thất bại!";
+                    return RedirectToAction("Index");
+                }
+                var email = claimsIdentity.FindFirst(ClaimTypes.Email)?.Value;
+                var name = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+                if (string.IsNullOrEmpty(email))
+                {
+                    TempData["Error"] = "Không lấy được email từ Google!";
+                    return RedirectToAction("Index");
+                }
+                var khachHang = db.KhachHangs.FirstOrDefault(kh => kh.Email == email);
+                if (khachHang == null)
+                {
+                    khachHang = new KhachHang
+                    {
+                        MaKH = Guid.NewGuid().ToString(),
+                        HoTen = name,
+                        Email = email,
+                        MatKhau = Guid.NewGuid().ToString()
+                    };
+                    db.KhachHangs.Add(khachHang);
+                    db.SaveChanges();
+                }
+                Session["KhachHang"] = khachHang;
+                Session["MaKH"] = khachHang.MaKH;
+                Session["HoTen"] = khachHang.HoTen;
+                TempData["Success"] = "Đăng nhập Google thành công!";
+                return RedirectToAction("Index", "Home");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.ToString();
+                return RedirectToAction("Index");
+            }
         }
 
 

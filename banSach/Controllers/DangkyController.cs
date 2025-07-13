@@ -26,11 +26,11 @@ namespace banSach.Controllers
                 string confirmPassword = Request.Form["ConfirmPassword"];
 
                 // Kiểm tra xác nhận mật khẩu
-                if (khachHang.MatKhau != confirmPassword)
-                {
-                    TempData["Error"] = "Mật khẩu xác nhận không khớp!";
-                    return View(khachHang);
-                }
+                //if (khachHang.MatKhau != confirmPassword)
+                //{
+                //    TempData["Error"] = "Mật khẩu xác nhận không khớp!";
+                //    return View(khachHang);
+                //}
 
                 // Kiểm tra điều kiện mật khẩu mạnh
                 if (khachHang.MatKhau.Length < 8 || !khachHang.MatKhau.Any(char.IsUpper) || !khachHang.MatKhau.Any(char.IsLower) || !khachHang.MatKhau.Any(char.IsDigit))
@@ -40,9 +40,9 @@ namespace banSach.Controllers
                 }
 
                 // Kiểm tra email hoặc số điện thoại đã tồn tại
-                if (db.KhachHangs.Any(kh => kh.Email == khachHang.Email || kh.SoDienThoai == khachHang.SoDienThoai))
+                if (db.KhachHangs.Any(kh => kh.Email == khachHang.Email))
                 {
-                    TempData["Error"] = "Email hoặc số điện thoại đã được sử dụng.";
+                    TempData["Error"] = "Email đã được sử dụng.";
                     return View(khachHang);
                 }
 

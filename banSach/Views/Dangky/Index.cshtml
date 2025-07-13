@@ -197,113 +197,188 @@
         </div>
     }
 </div>
-<div class="register-container">
-    <h2 style="text-align: center; margin-bottom: 30px;">Đăng Ký Tài Khoản</h2>
-
-
-
-    @using (Html.BeginForm("Index", "DangKy", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken()
-
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.HoTen, "Họ và Tên")
-            <div class="input-container">
-                @Html.EditorFor(model => model.HoTen, new { htmlAttributes = new { placeholder = "Nhập họ và tên" } })
-                @Html.ValidationMessageFor(model => model.HoTen, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.NgaySinh, "Ngày Sinh")
-            <div class="input-container">
-                @Html.EditorFor(model => model.NgaySinh, new { htmlAttributes = new { type = "date", placeholder = "Chọn ngày sinh" } })
-                @Html.ValidationMessageFor(model => model.NgaySinh, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, "Email")
-            <div class="input-container">
-                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { placeholder = "Nhập email" } })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DiaChi, "Địa Chỉ")
-            <div class="input-container">
-                @Html.EditorFor(model => model.DiaChi, new { htmlAttributes = new { placeholder = "Nhập địa chỉ" } })
-                @Html.ValidationMessageFor(model => model.DiaChi, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.SoDienThoai, "Số Điện Thoại")
-            <div class="input-container">
-                @Html.EditorFor(model => model.SoDienThoai, new { htmlAttributes = new { placeholder = "Nhập số điện thoại" } })
-                @Html.ValidationMessageFor(model => model.SoDienThoai, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.MatKhau, "Mật Khẩu")
-            <div class="input-container password-container">
-                @Html.EditorFor(model => model.MatKhau, new { htmlAttributes = new { type = "password", placeholder = "Nhập mật khẩu", id = "password" } })
-                <i class="bx bx-show toggle-password" id="togglePassword"></i>
-                @Html.ValidationMessageFor(model => model.MatKhau, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="ConfirmPassword">Nhập Lại Mật Khẩu</label>
-            <div class="input-container password-container">
-                <input type="password" name="ConfirmPassword" id="confirmPassword" placeholder="Nhập lại mật khẩu" class="form-control" />
-                <i class="bx bx-show toggle-password" id="toggleConfirmPassword"></i>
-            </div>
-        </div>
-
-
-
-        <div class="form-group submit-group">
-            <input type="submit" value="Đăng Ký" class="btn-primary" />
-        </div>
-        <div class="register-link">
-            <p>Bạn đã có tài khoản? <a href="@Url.Action("Index", "Dangnhap")">Đăng nhập</a></p>
-        </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .register-bg {
+        min-height: 10vh;
+        background: #fff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
     }
+    .register-title {
+        margin-top: 40px;
+        margin-bottom: 30px;
+        font-size: 24px;
+        font-weight: 500;
+        text-align: center;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+    .register-box {
+        background: #fff;
+        border-radius: 6px;
+        box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+        max-width: 340px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 32px 28px 24px 28px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .input-group {
+        position: relative;
+        margin-bottom: 18px;
+    }
+    .input-group input {
+        width: 100%;
+        padding: 10px 12px 10px 38px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 15px;
+        background: #fafafa;
+        transition: border 0.2s;
+    }
+    .input-group input:focus {
+        border: 1.5px solid #4caf50;
+        outline: none;
+        background: #fff;
+    }
+    .input-group .input-group-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #bdbdbd;
+        font-size: 16px;
+    }
+    .input-group .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #bdbdbd;
+        font-size: 17px;
+    }
+    .btn-register {
+        width: 100%;
+        background: #21a957;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 10px 0;
+        margin-bottom: 10px;
+        transition: background 0.2s;
+    }
+    .btn-register:hover {
+        background: #188c43;
+    }
+    .register-back {
+        font-size: 14px;
+        margin-bottom: 16px;
+        color: #444;
+        text-align: left;
+    }
+    .register-back a {
+        color: #21a957;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .register-back a:hover {
+        text-decoration: underline;
+    }
+    .social-login-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 8px;
+    }
+    .btn-facebook {
+        background: #3b5998;
+        color: #fff;
+        flex: 1;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        font-size: 15px;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        transition: background 0.2s;
+    }
+    .btn-facebook:hover {
+        background: #2d4373;
+    }
+    .btn-google {
+        background: #dd4b39;
+        color: #fff;
+        flex: 1;
+        border: none;
+        border-radius: 4px;
+        font-weight: 500;
+        font-size: 15px;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        transition: background 0.2s;
+    }
+    .btn-google:hover {
+        background: #b03a2e;
+    }
+    .text-danger {
+        font-size: 13px;
+        color: #e74c3c;
+        margin-top: 3px;
+        text-align: left;
+    }
+</style>
+<div class="register-bg">
+    <div class="register-title">TẠO TÀI KHOẢN</div>
+    <div class="register-box">
+        @using (Html.BeginForm("Index", "DangKy", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="input-group">
+                <span class="input-group-icon"><i class="fa fa-user"></i></span>
+                <input type="text" name="HoTen" id="HoTen" placeholder="Họ và Tên" class="form-control" value="@Request["HoTen"]" />
+            </div>
+            <div class="input-group">
+                <span class="input-group-icon"><i class="fa fa-envelope"></i></span>
+                <input type="email" name="Email" id="Email" placeholder="Email" class="form-control" value="@Request["Email"]" />
+            </div>
+            <div class="input-group password-container">
+                <span class="input-group-icon"><i class="fa fa-lock"></i></span>
+                <input type="password" name="MatKhau" id="MatKhau" placeholder="Mật khẩu" class="form-control" />
+                <i class="fa fa-eye toggle-password" id="togglePassword"></i>
+            </div>
+            <input type="submit" value="Đăng ký" class="btn-register" />
+            <div class="register-back">
+                <a href="@Url.Action("Index", "Dangnhap")">Quay về</a>
+            </div>
+            <div class="social-login-row">
+                <button type="button" class="btn-facebook"><i class="fa fa-facebook"></i></button>
+                <button type="button" class="btn-google"><i class="fa fa-google-plus"></i></button>
+            </div>
+        }
+    </div>
 </div>
-
 <script>
-    // Xử lý hiển thị/ẩn mật khẩu
-    document.getElementById('togglePassword').addEventListener('click', function () {
-        const passwordInput = document.getElementById('password');
-        const icon = this;
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.classList.remove('bx-show');
-            icon.classList.add('bx-hide');
-        } else {
-            passwordInput.type = 'password';
-            icon.classList.remove('bx-hide');
-            icon.classList.add('bx-show');
-        }
-    });
-
-    // Xử lý hiển thị/ẩn xác nhận mật khẩu
-    document.getElementById('toggleConfirmPassword').addEventListener('click', function () {
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const icon = this;
-        if (confirmPasswordInput.type === 'password') {
-            confirmPasswordInput.type = 'text';
-            icon.classList.remove('bx-show');
-            icon.classList.add('bx-hide');
-        } else {
-            confirmPasswordInput.type = 'password';
-            icon.classList.remove('bx-hide');
-            icon.classList.add('bx-show');
-        }
+    // Toggle password
+    const togglePassword = document.getElementById('togglePassword');
+    togglePassword?.addEventListener('click', () => {
+        const passwordInput = document.getElementById('MatKhau');
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        togglePassword.classList.toggle('fa-eye', !isPassword);
+        togglePassword.classList.toggle('fa-eye-slash', isPassword);
     });
 </script>

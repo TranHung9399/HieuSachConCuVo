@@ -23,7 +23,7 @@
                     <h5 class="mb-0">@ViewBag.Category.TenLoai</h5>
                 </div>
                 <div class="col-md-4 col-6 text-end">
-	                <select id="sortSelect" class="form-check-inline" style="min-width: 160px;">
+	                <select id="sortSelect" class="form-check-inline" style="min-width: 160px;" onchange="handleSortChange(this.value)">
 		                <option value="moinhat">Mới nhất</option>
 		                <option value="cunhat">Cũ nhất</option>
 		                <option value="giatangdan">Giá: Tăng dần</option>
@@ -256,7 +256,57 @@
         }
     </style>
     @section Scripts {
+
         <script src="~/Scripts/book-common.js"></script>
+        
+        <script>
+            // Function để xử lý thay đổi sort
+            function handleSortChange(sortValue) {
+                console.log('handleSortChange called with:', sortValue); // Debug log
+                
+                // Lấy id danh mục từ URL (nếu có)
+                const urlParams = new URLSearchParams(window.location.search);
+                const id = urlParams.get('id');
+                const type = urlParams.get('type');
+                
+                let url = '@Url.Action("Index", "Book")';
+                let params = [];
+                
+                if (id) {
+                    params.push('id=' + encodeURIComponent(id));
+                }
+                if (type) {
+                    params.push('type=' + encodeURIComponent(type));
+                }
+                if (sortValue) {
+                    params.push('sort=' + encodeURIComponent(sortValue));
+                }
+                
+                if (params.length > 0) {
+                    url += '?' + params.join('&');
+                }
+                
+                console.log('Redirecting to:', url); // Debug log
+                window.location.href = url;
+            }
+
+            // Đợi DOM load xong
+            document.addEventListener('DOMContentLoaded', function() {
+                var sortSelect = document.getElementById('sortSelect');
+                
+                if (sortSelect) {
+                    // Set lại giá trị sortSelect khi load lại trang
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const sort = urlParams.get('sort');
+                    if (sort) {
+                        sortSelect.value = sort;
+                        console.log('Set dropdown value to:', sort, 'Thực tế:', sortSelect.value);
+                    }
+                } else {
+                    console.error('sortSelect element not found!'); // Debug log
+                }
+            });
+        </script>
     }
 
     <style>
