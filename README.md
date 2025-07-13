@@ -186,6 +186,9 @@ Cấu hình SMTP để gửi email đặt lại mật khẩu trong `Helper/SendM
 
 ## 📄 License
 
+#Website demo
+https://bookstore-h2d9h5g2bzg6djf4.eastasia-01.azurewebsites.net/
+
 Dự án này được phát hành dưới MIT License. Xem file `LICENSE` để biết thêm chi tiết.
 
 ---

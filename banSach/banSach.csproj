@@ -433,7 +433,6 @@
     <Content Include="Views\Home\ChinhSachBanHang.cshtml" />
     <Content Include="Views\Home\ChinhSachBaoMat.cshtml" />
     <Content Include="Views\GioHang\PaymentConfirm.cshtml" />
-    <Content Include="Views\GioHang\CheckoutGuest.cshtml" />
     <Content Include="Views\Shared\_CustomToast.cshtml" />
     <Content Include="Views\Book\TatcaSach.cshtml" />
     <Content Include="Views\Shared\_SidebarCategory.cshtml" />
