@@ -4,7 +4,7 @@
     var loaiList = ViewBag.LoaiList as List<banSach.Models.Loai>;
     <link rel="stylesheet" href="~/Content/css/thongbao1.css" />
     @Html.Partial("_CustomToast")}
-<section class="hero-slider">
+<section class="hero-slider" id="hero-slider" style="display:none">
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <!-- Indicators -->
         <div class="carousel-indicators">
@@ -19,18 +19,6 @@
             <div class="carousel-item active">
                 <div class="image-frame">
                     <img src="@Url.Content("~/img/uudai.png")" class="d-block" alt="Slide 1">
-                </div>
-            </div>
-            <!-- Slide 2 -->
-            <div class="carousel-item">
-                <div class="image-frame">
-                    <img src="@Url.Content("~/img/ms_banner_img4.jpg")"  class="d-block" alt="Slide 2">
-                </div>
-            </div>
-            <!-- Slide 3 -->
-            <div class="carousel-item">
-                <div class="image-frame">
-                    <img src="@Url.Content("~/img/oc_phan_lan_post_facebook_1800x1200px_3e638c3554dd4fdca501159ffe658dc6_grande.jpg")" class="d-block" alt="Slide 3">
                 </div>
             </div>
         </div>
@@ -506,6 +494,7 @@ keyframes fadeInUp {
         var carousel = new bootstrap.Carousel(myCarousel, {
             interval: 5000, // Thời gian chuyển slide (5 giây)
             pause: 'hover', // Tạm dừng khi di chuột vào
+            wrap: true // Lặp lại slider
         });
     });
 </script>
