@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 <link rel="stylesheet" href="~/Content/css/thongbao1.css" />
+<link rel="stylesheet" href="~/css/bookprice.css" />
 @Html.Partial("_CustomToast")
 <div class="container product-detail-page">
     <nav class="breadcrumb mb-4" style="justify-content: flex-start; text-align: left;">
@@ -45,8 +46,9 @@
                 </div>
                 <div><b>Nhà xuất bản:</b> @Model.NhaXuatBan.TenNXB</div>
             </div>
-            <div class="product-price mb-3">
-                <span class="price-new">@String.Format("{0:N0}", Model.GiaBan) ₫</span>
+            <div class="price-container">
+	            <div class="product-original-price">Giá gốc: @String.Format("{0:N0}đ", Model.GiaBan)</div>
+	            <div class="product-discount-price">Giá bán: @String.Format("{0:N0}đ", Model.GiaChietKhau)</div>
             </div>
             <div class="product-actions d-flex align-items-center mb-3">
                 <div class="quantity-selector me-3">

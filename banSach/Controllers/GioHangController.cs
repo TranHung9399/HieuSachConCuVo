@@ -85,7 +85,7 @@ namespace banSach.Controllers
 					{
 						MaSach = iMasach,
 						SoLuong = qty,
-						DonGia = sach.GiaBan
+						DonGia = sach.GiaChietKhau
 					});
 				}
 				else
@@ -125,7 +125,7 @@ namespace banSach.Controllers
 						MaGioHang = gioHang.MaGioHang,
 						MaSach = iMasach,
 						SoLuong = qty,
-						DonGia = sach.GiaBan
+						DonGia = sach.GiaChietKhau
 					};
 					db.ChiTietGioHangs.Add(chiTiet);
 				}

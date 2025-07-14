@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace banSach.Controllers
 {

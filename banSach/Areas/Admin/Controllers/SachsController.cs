@@ -130,12 +130,14 @@ namespace bansach.Areas.Admin.Controllers
                     HinhAnh.SaveAs(path);
                     sach.Hinh = fileName;
                 }
-                sach.Status = 1;
-                db.Saches.Add(sach);
-                await db.SaveChangesAsync();
-                TempData["Message"] = "Thêm sách thành công!";
-                return RedirectToAction("Index");
-            }
+				if (sach.GiaBan.HasValue)
+					sach.GiaChietKhau = Math.Round(sach.GiaBan.Value * 0.9m, 0);
+
+				db.Saches.Add(sach);
+				await db.SaveChangesAsync();
+				TempData["Message"] = "Thêm sách thành công!";
+				return RedirectToAction("Index");
+}
 
             ViewBag.MaLoai = new SelectList(db.Loais, "MaLoai", "TenLoai", sach.MaLoai);
             ViewBag.MaNXB = new SelectList(db.NhaXuatBans, "MaNXB", "TenNXB", sach.MaNXB);
@@ -201,12 +203,16 @@ namespace bansach.Areas.Admin.Controllers
                 }
 
                 sach.Status = 1;
-                db.Entry(sach).State = EntityState.Modified;
-                await db.SaveChangesAsync();
+				// Tính lại giá chiết khấu (giảm 10%)
+				if (sach.GiaBan.HasValue)
+					sach.GiaChietKhau = Math.Round(sach.GiaBan.Value * 0.9m, 0);
 
-                TempData["Message"] = "Cập nhật sách thành công!";
-                return RedirectToAction("Index");
-            }
+				db.Entry(sach).State = EntityState.Modified;
+				await db.SaveChangesAsync();
+
+				TempData["Message"] = "Cập nhật sách thành công!";
+				return RedirectToAction("Index");
+}
 
             ViewBag.MaLoai = new SelectList(db.Loais, "MaLoai", "TenLoai", sach.MaLoai);
             ViewBag.MaNXB = new SelectList(db.NhaXuatBans, "MaNXB", "TenNXB", sach.MaNXB);

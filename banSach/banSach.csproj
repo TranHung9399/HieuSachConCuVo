@@ -295,6 +295,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\slicknav.min.css" />
     <Content Include="Content\themify-icons.css" />
+    <Content Include="css\bookprice.css" />
     <Content Include="css\layout.css" />
     <Content Include="css\phantrang.css" />
     <Content Include="favicon.ico" />

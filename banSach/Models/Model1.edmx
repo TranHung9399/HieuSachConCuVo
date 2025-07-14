@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="QLBansachModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="QLBansachModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ChiTietDonHang">
           <Key>
             <PropertyRef Name="MaDonHang" />
@@ -107,6 +107,7 @@
           <Property Name="SoLuongTon" Type="int" />
           <Property Name="MaLoai" Type="nvarchar" MaxLength="50" />
           <Property Name="Status" Type="int" />
+          <Property Name="GiaChietKhau" Type="decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="TacGia">
           <Key>
@@ -128,7 +129,7 @@
           <Property Name="MaSach" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="VaiTro" Type="nvarchar" MaxLength="100" />
         </EntityType>
-        <Association Name="FK__ChiTietDo__MaDon__5FB337D6">
+        <Association Name="FK__ChiTietDo__MaDon__71D1E811">
           <End Role="DonDatHang" Type="Self.DonDatHang" Multiplicity="1" />
           <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
           <ReferentialConstraint>
@@ -140,7 +141,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ChiTietDo__MaSac__60A75C0F">
+        <Association Name="FK__ChiTietDo__MaSac__72C60C4A">
           <End Role="Sach" Type="Self.Sach" Multiplicity="1" />
           <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
           <ReferentialConstraint>
@@ -152,7 +153,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ChiTietGi__MaGio__66603565">
+        <Association Name="FK__ChiTietGi__MaGio__73BA3083">
           <End Role="GioHang" Type="Self.GioHang" Multiplicity="0..1" />
           <End Role="ChiTietGioHang" Type="Self.ChiTietGioHang" Multiplicity="*" />
           <ReferentialConstraint>
@@ -164,7 +165,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ChiTietGi__MaSac__6754599E">
+        <Association Name="FK__ChiTietGi__MaSac__74AE54BC">
           <End Role="Sach" Type="Self.Sach" Multiplicity="0..1" />
           <End Role="ChiTietGioHang" Type="Self.ChiTietGioHang" Multiplicity="*" />
           <ReferentialConstraint>
@@ -176,7 +177,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__GioHang__MaKH__6383C8BA">
+        <Association Name="FK__GioHang__MaKH__75A278F5">
           <End Role="KhachHang" Type="Self.KhachHang" Multiplicity="0..1" />
           <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
           <ReferentialConstraint>
@@ -188,7 +189,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__NhanVien__MaCV__4BAC3F29">
+        <Association Name="FK__NhanVien__MaCV__76969D2E">
           <End Role="ChucVu" Type="Self.ChucVu" Multiplicity="0..1" />
           <End Role="NhanVien" Type="Self.NhanVien" Multiplicity="*" />
           <ReferentialConstraint>
@@ -200,7 +201,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Sach__MaLoai__5535A963">
+        <Association Name="FK__Sach__MaLoai__787EE5A0">
           <End Role="Loai" Type="Self.Loai" Multiplicity="0..1" />
           <End Role="Sach" Type="Self.Sach" Multiplicity="*" />
           <ReferentialConstraint>
@@ -212,7 +213,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Sach__MaNXB__5441852A">
+        <Association Name="FK__Sach__MaNXB__778AC167">
           <End Role="NhaXuatBan" Type="Self.NhaXuatBan" Multiplicity="0..1" />
           <End Role="Sach" Type="Self.Sach" Multiplicity="*" />
           <ReferentialConstraint>
@@ -224,7 +225,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__VietSach__MaSach__5AEE82B9">
+        <Association Name="FK__VietSach__MaSach__7A672E12">
           <End Role="Sach" Type="Self.Sach" Multiplicity="1" />
           <End Role="VietSach" Type="Self.VietSach" Multiplicity="*" />
           <ReferentialConstraint>
@@ -236,7 +237,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__VietSach__MaTG__59FA5E80">
+        <Association Name="FK__VietSach__MaTG__797309D9">
           <End Role="TacGia" Type="Self.TacGia" Multiplicity="1" />
           <End Role="VietSach" Type="Self.VietSach" Multiplicity="*" />
           <ReferentialConstraint>
@@ -261,49 +262,48 @@
           <EntitySet Name="Sach" EntityType="Self.Sach" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TacGia" EntityType="Self.TacGia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VietSach" EntityType="Self.VietSach" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__ChiTietDo__MaDon__5FB337D6" Association="Self.FK__ChiTietDo__MaDon__5FB337D6">
+          <AssociationSet Name="FK__ChiTietDo__MaDon__71D1E811" Association="Self.FK__ChiTietDo__MaDon__71D1E811">
             <End Role="DonDatHang" EntitySet="DonDatHang" />
             <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
           </AssociationSet>
-          <AssociationSet Name="FK__ChiTietDo__MaSac__60A75C0F" Association="Self.FK__ChiTietDo__MaSac__60A75C0F">
+          <AssociationSet Name="FK__ChiTietDo__MaSac__72C60C4A" Association="Self.FK__ChiTietDo__MaSac__72C60C4A">
             <End Role="Sach" EntitySet="Sach" />
             <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
           </AssociationSet>
-          <AssociationSet Name="FK__ChiTietGi__MaGio__66603565" Association="Self.FK__ChiTietGi__MaGio__66603565">
+          <AssociationSet Name="FK__ChiTietGi__MaGio__73BA3083" Association="Self.FK__ChiTietGi__MaGio__73BA3083">
             <End Role="GioHang" EntitySet="GioHang" />
             <End Role="ChiTietGioHang" EntitySet="ChiTietGioHang" />
           </AssociationSet>
-          <AssociationSet Name="FK__ChiTietGi__MaSac__6754599E" Association="Self.FK__ChiTietGi__MaSac__6754599E">
+          <AssociationSet Name="FK__ChiTietGi__MaSac__74AE54BC" Association="Self.FK__ChiTietGi__MaSac__74AE54BC">
             <End Role="Sach" EntitySet="Sach" />
             <End Role="ChiTietGioHang" EntitySet="ChiTietGioHang" />
           </AssociationSet>
-          <AssociationSet Name="FK__GioHang__MaKH__6383C8BA" Association="Self.FK__GioHang__MaKH__6383C8BA">
+          <AssociationSet Name="FK__GioHang__MaKH__75A278F5" Association="Self.FK__GioHang__MaKH__75A278F5">
             <End Role="KhachHang" EntitySet="KhachHang" />
             <End Role="GioHang" EntitySet="GioHang" />
           </AssociationSet>
-          <AssociationSet Name="FK__NhanVien__MaCV__4BAC3F29" Association="Self.FK__NhanVien__MaCV__4BAC3F29">
+          <AssociationSet Name="FK__NhanVien__MaCV__76969D2E" Association="Self.FK__NhanVien__MaCV__76969D2E">
             <End Role="ChucVu" EntitySet="ChucVu" />
             <End Role="NhanVien" EntitySet="NhanVien" />
           </AssociationSet>
-          <AssociationSet Name="FK__Sach__MaLoai__5535A963" Association="Self.FK__Sach__MaLoai__5535A963">
+          <AssociationSet Name="FK__Sach__MaLoai__787EE5A0" Association="Self.FK__Sach__MaLoai__787EE5A0">
             <End Role="Loai" EntitySet="Loai" />
             <End Role="Sach" EntitySet="Sach" />
           </AssociationSet>
-          <AssociationSet Name="FK__Sach__MaNXB__5441852A" Association="Self.FK__Sach__MaNXB__5441852A">
+          <AssociationSet Name="FK__Sach__MaNXB__778AC167" Association="Self.FK__Sach__MaNXB__778AC167">
             <End Role="NhaXuatBan" EntitySet="NhaXuatBan" />
             <End Role="Sach" EntitySet="Sach" />
           </AssociationSet>
-          <AssociationSet Name="FK__VietSach__MaSach__5AEE82B9" Association="Self.FK__VietSach__MaSach__5AEE82B9">
+          <AssociationSet Name="FK__VietSach__MaSach__7A672E12" Association="Self.FK__VietSach__MaSach__7A672E12">
             <End Role="Sach" EntitySet="Sach" />
             <End Role="VietSach" EntitySet="VietSach" />
           </AssociationSet>
-          <AssociationSet Name="FK__VietSach__MaTG__59FA5E80" Association="Self.FK__VietSach__MaTG__59FA5E80">
+          <AssociationSet Name="FK__VietSach__MaTG__797309D9" Association="Self.FK__VietSach__MaTG__797309D9">
             <End Role="TacGia" EntitySet="TacGia" />
             <End Role="VietSach" EntitySet="VietSach" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="QLBansachModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -426,6 +426,7 @@
           <NavigationProperty Name="Loai" Relationship="Self.FK__Sach__MaLoai__5535A963" FromRole="Sach" ToRole="Loai" />
           <NavigationProperty Name="NhaXuatBan" Relationship="Self.FK__Sach__MaNXB__5441852A" FromRole="Sach" ToRole="NhaXuatBan" />
           <NavigationProperty Name="VietSaches" Relationship="Self.FK__VietSach__MaSach__5AEE82B9" FromRole="Sach" ToRole="VietSach" />
+          <Property Name="GiaChietKhau" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="TacGia">
           <Key>
@@ -729,6 +730,7 @@
           <EntitySetMapping Name="Saches">
             <EntityTypeMapping TypeName="QLBansachModel.Sach">
               <MappingFragment StoreEntitySet="Sach">
+                <ScalarProperty Name="GiaChietKhau" ColumnName="GiaChietKhau" />
                 <ScalarProperty Name="MaSach" ColumnName="MaSach" />
                 <ScalarProperty Name="TenSach" ColumnName="TenSach" />
                 <ScalarProperty Name="Hinh" ColumnName="Hinh" />
