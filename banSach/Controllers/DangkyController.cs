@@ -33,7 +33,7 @@ namespace banSach.Controllers
                 //}
 
                 // Kiểm tra điều kiện mật khẩu mạnh
-                if (khachHang.MatKhau.Length < 8 || !khachHang.MatKhau.Any(char.IsUpper) || !khachHang.MatKhau.Any(char.IsLower) || !khachHang.MatKhau.Any(char.IsDigit))
+                 if (khachHang.MatKhau.Length < 8 || !khachHang.MatKhau.Any(char.IsUpper) || !khachHang.MatKhau.Any(char.IsLower) || !khachHang.MatKhau.Any(char.IsDigit))
                 {
                     TempData["Error"] = "Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường và chữ số.";
                     return View(khachHang);

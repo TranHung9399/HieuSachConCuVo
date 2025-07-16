@@ -1,80 +1,136 @@
 ﻿@model banSach.Models.CheckoutViewModel
 @{
-    ViewBag.Title = "Xác nhận đơn hàng";
+    Layout = null; // Không dùng layout chung
 }
 
-<h2 class="mb-4">Xác nhận đơn hàng</h2>
-
-<h4>Thông tin khách hàng</h4>
-@using (Html.BeginForm("DatHang", "GioHang", FormMethod.Post))
-{
-    <div class="row mb-3">
-        <div class="col-md-6 mb-2">
-            <label for="HoTen" class="form-label">Họ tên</label>
-            <input type="text" name="HoTen" class="form-control" id="HoTen" value="@Model.HoTen" required />
-        </div>
-        <div class="col-md-6 mb-2">
-            <label for="SoDienThoai" class="form-label">Số điện thoại</label>
-            <input type="text" name="SoDienThoai" class="form-control" id="SoDienThoai" value="@Model.SoDienThoai" required />
-        </div>
-        <div class="col-md-6 mb-2">
-            <label for="Email" class="form-label">Email</label>
-            <input type="email" name="Email" class="form-control" id="Email" value="@Model.Email" required />
-        </div>
-        <div class="col-md-6 mb-2">
-            <label for="DiaChi" class="form-label">Địa chỉ</label>
-            <input type="text" name="DiaChi" class="form-control" id="DiaChi" value="@Model.DiaChi" required />
-        </div>
-    </div>
-
-    <h4 class="mt-4">Danh sách sản phẩm</h4>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Sách</th>
-                <th>Số lượng</th>
-                <th>Đơn giá</th>
-                <th>Thành tiền</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                decimal tongTien = 0;
-            }
-            @foreach (var item in Model.CartItems)
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Thanh toán</title>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <style>
+        html, body { height: 100%; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+        }
+        .checkout-container { max-width: 1200px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #eee; padding: 30px; }
+        .checkout-left { border-right: 1px solid #eee; }
+        .checkout-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; }
+        .order-summary { background: #fafbfc; border-radius: 8px; padding: 20px; }
+        .product-img-wrap { position: relative; display: inline-block; }
+        .product-img { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; }
+        .product-qty-badge {
+            position: absolute; top: -6px; right: -6px;
+            background: #007bff; color: #fff; border-radius: 50%;
+            width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+            font-size: 0.85em; font-weight: bold; border: 2px solid #fff; z-index:2;
+        }
+        .product-title { font-weight: 500; }
+        .discount { color: #1da1f2; font-size: 0.95em; }
+        .total { font-size: 1.2em; color: #007bff; font-weight: bold; }
+        .btn-order { min-width: 140px; }
+        .btn-back { min-width: 140px; }
+        media (max-width: 991px) {
+            .checkout-container { padding: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container row">
+        <!-- Thông tin nhận hàng -->
+        <div class="col-md-6 checkout-left">
+        <div style="text-align:center; margin-bottom: 20px;">
+                <img src="~/img/logo/logo.jpg" alt="Logo hiệu sách" style="max-width: 120px; height: auto;" />
+            </div>
+            <div class="checkout-title">Thông tin nhận hàng</div>
+            @using (Html.BeginForm("DatHang", "GioHang", FormMethod.Post))
             {
-                var thanhTien = (item.SoLuong ?? 0) * (item.DonGia ?? 0);
-                tongTien += thanhTien;
-                <tr>
-                    <td>@item.Sach.TenSach</td>
-                    <td>@item.SoLuong</td>
-                    <td>@String.Format("{0:#,##0} đ", item.DonGia)</td>
-                    <td>@String.Format("{0:#,##0} đ", thanhTien)</td>
-                </tr>
+                <div class="mb-3">
+                    <input type="email" name="Email" class="form-control" placeholder="Email" value="@Model.Email" required />
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="HoTen" class="form-control" placeholder="Họ và tên" value="@Model.HoTen" required />
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="SoDienThoai" class="form-control" placeholder="Số điện thoại (tùy chọn)" value="@Model.SoDienThoai" />
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="DiaChi" class="form-control" placeholder="Địa chỉ (tùy chọn)" value="@Model.DiaChi" />
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold mb-1">Phương thức thanh toán</label>
+                    @Html.DropDownList(
+                        "PhuongThucThanhToan",
+                        new SelectList(
+                            new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "Thanh toán tiền mặt", Value = "1" },
+                                new SelectListItem { Text = "Chuyển khoản", Value = "2" }
+                            },
+                            "Value",
+                            "Text"
+                        ),
+                        "-- Chọn phương thức thanh toán --",
+                        new { @class = "form-control" }
+                    )
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary btn-order">ĐẶT HÀNG</button>
+                </div>
             }
-            <tr>
-                <td colspan="3" class="text-right font-weight-bold">Tổng tiền:</td>
-                <td class="text-danger font-weight-bold">@String.Format("{0:#,##0} đ", tongTien)</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="row mb-3 align-items-center">
-        <div class="col-sm-3">
-            <label for="PhuongThucThanhToan" class="col-form-label fw-bold">Phương thức thanh toán</label>
         </div>
-        <div class="col-sm-9">
-            @Html.DropDownList("PhuongThucThanhToan", new SelectList(
-                new List<SelectListItem>
+
+        <!-- Đơn hàng -->
+        <div class="col-md-6">
+            <div class="order-summary">
+                <div class="checkout-title">Đơn hàng (@Model.CartItems.Count sản phẩm)</div>
+                @foreach (var item in Model.CartItems)
                 {
-                    new SelectListItem { Text = "Thanh toán tiền mặt", Value = "1" },
-                    new SelectListItem { Text = "Chuyển khoản", Value = "2" }
-                }, "Value", "Text"), "-- Chọn phương thức thanh toán --", new { @class = "form-control form-control-lg", id = "PhuongThucThanhToan" })
+                    <div class="d-flex align-items-center mb-2">
+                        <div style="position: relative; display: inline-block; margin-right: 18px;">
+                            <img src="~/img/sach/@item.Sach.Hinh" class="product-img me-2" style="width:48px; height:48px; object-fit:cover; border-radius:4px;" />
+                            <span style="position: absolute; top: -6px; right: -6px; background: #007bff; color: #fff; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.85em; font-weight: bold; border: 2px solid #fff; z-index:2;">@item.SoLuong</span>
+                        </div>
+                        <div>
+                            <div class="product-title">@item.Sach.TenSach</div>
+                            <div class="discount">
+                                @if(item.Sach.GiaChietKhau.HasValue && item.Sach.GiaBan.HasValue && item.Sach.GiaChietKhau.Value < item.Sach.GiaBan.Value)
+                                {
+                                    var giam = item.Sach.GiaBan.Value - item.Sach.GiaChietKhau.Value;
+                                    <span>Giảm @Math.Round(100 * giam / item.Sach.GiaBan.Value, 0)% so với giá bìa (-@String.Format("{0:#,##0}đ", giam))</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="ms-auto fw-bold">@String.Format("{0:#,##0}đ", (item.DonGia ?? 0) * (item.SoLuong ?? 0))</div>
+                    </div>
+                }
+                <div class="input-group my-3">
+                    <input type="text" class="form-control" placeholder="Nhập mã giảm giá" name="MaGiamGia" />
+                    <button class="btn btn-outline-secondary" type="button">Áp dụng</button>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Tạm tính</span>
+                    <span>@String.Format("{0:#,##0}đ", Model.CartItems.Sum(i => (i.SoLuong ?? 0) * (i.DonGia ?? 0)))</span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>Phí vận chuyển</span>
+                    <span>-</span>
+                </div>
+                <hr />
+                <div class="d-flex justify-content-between total">
+                    <span>Tổng cộng</span>
+                    <span>@String.Format("{0:#,##0}đ", Model.CartItems.Sum(i => (i.SoLuong ?? 0) * (i.DonGia ?? 0)))</span>
+                </div>
+                <div class="mt-2">
+                    <a href="@Url.Action("Index", "GioHang")">Quay về giỏ hàng</a>
+                </div>
+            </div>
         </div>
     </div>
-
-    <div class="text-right mt-3">
-        <a href="@Url.Action("Index", "GioHang")" class="btn btn-secondary">Quay lại giỏ hàng</a>
-        <button type="submit" class="btn btn-primary">Xác nhận đặt hàng</button>
-    </div>
-}
+</body>
+</html>

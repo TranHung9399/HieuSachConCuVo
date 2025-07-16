@@ -295,6 +295,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\slicknav.min.css" />
     <Content Include="Content\themify-icons.css" />
+    <Content Include="css\book.css" />
     <Content Include="css\bookprice.css" />
     <Content Include="css\layout.css" />
     <Content Include="css\phantrang.css" />
@@ -304,6 +305,8 @@
     <Content Include="img\logo\logo.jpg" />
     <Content Include="img\logo\logo1.jpg" />
     <Content Include="img\logo\logoo.jpg" />
+    <Content Include="img\ms_banner_img4.jpg" />
+    <Content Include="img\oc_phan_lan_post_facebook_1800x1200px_3e638c3554dd4fdca501159ffe658dc6_grande.jpg" />
     <Content Include="img\sach\8935095632763_11.jpg" />
     <Content Include="img\sach\8935235244603.jpg" />
     <Content Include="img\sach\tải xuống.jpg" />

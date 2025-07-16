@@ -3,10 +3,13 @@
     ViewBag.Title = "Hiệu Sách Con Cú Vọ";
     var loaiList = ViewBag.LoaiList as List<banSach.Models.Loai>;
     <link rel="stylesheet" href="~/Content/css/thongbao1.css" />
-    <link rel="stylesheet" href="~/css/bookprice.css" />
+    <link rel="stylesheet" href="@Url.Content("~/css/bookprice.css")" />
+    <link rel="stylesheet" href="@Url.Content("~/css/book.css")" />
     @Html.Partial("_CustomToast")}
-<section class="hero-slider" id="hero-slider" style="display:none">
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+
+<!-- Slider banner full width -->
+<section class="hero-slider" id="hero-slider">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
         <!-- Indicators -->
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -16,25 +19,41 @@
 
         <!-- Slides -->
         <div class="carousel-inner">
-            <!-- Slide 1 -->
-            <div class="carousel-item active">
-                <div class="image-frame">
-                    <img src="@Url.Content("~/img/uudai.png")" class="d-block" alt="Slide 1">
-                </div>
-            </div>
-        </div>
+	        <!-- Slide 1 -->
+	        <div class="carousel-item active">
+		        <div class="slide-content">
+			        <img src="@Url.Content("~/img/uudai.png")" class="d-block" alt="Ưu đãi đặc biệt">
+		        </div>
+	        </div>
+            
+	        <!-- Slide 2 -->
+	        <div class="carousel-item">
+		        <div class="slide-content">
+			        <img src="@Url.Content("~/img/ms_banner_img4.jpg")" class="d-block" alt="">
+		        </div>
+	        </div>
+            
+	        <!-- Slide 3 -->
+	        <div class="carousel-item">
+		        <div class="slide-content">
+			        <img src="@Url.Content("~/img/oc_phan_lan_post_facebook_1800x1200px_3e638c3554dd4fdca501159ffe658dc6_grande.jpg")" class="d-block" alt="">
+                   
+		        </div>
+	        </div>
 
-        <!-- Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+	        <!-- Controls -->
+	        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+		        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		        <span class="visually-hidden">Previous</span>
+	        </button>
+	        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+		        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+		        <span class="visually-hidden">Next</span>
+	        </button>
+        </div>
+	</div>
 </section>
+
 <div class="book-features">
     <div class="feature-item">
         <i class="fa fa-truck"></i>
@@ -258,277 +277,144 @@
     </div>
 </div>
 <style>
-    .hero-slider {
-        position: relative;
-        width: 100%;
-        overflow: hidden;
-        margin-bottom: 40px; /* Khoảng cách giữa slide và sách */
-    }
+	.sale-badge {
+		position: absolute;
+		top: 10px;
+		right: 10px;
+		background: #e53935;
+		color: #fff;
+		font-weight: 600;
+		border-radius: 50%;
+		width: 48px;
+		height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 16px;
+		box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+		z-index: 2;
+	}
+	.category-title {
+		text-align: center !important;
+	}
+	.book-features {
+		display: flex;
+		justify-content: center;
+		align-items: stretch;
+		gap: 30px;
+		margin: 30px 0;
+		flex-wrap: nowrap; /* Prevent wrapping to a new line */
+		width: 100%;
+	}
 
-    .carousel-item {
-        height: 500px; /* Chiều cao cố định cho carousel */
-        display: flex; /* Sử dụng flexbox để căn giữa */
-        justify-content: center; /* Căn giữa ngang */
-        align-items: center; /* Căn giữa dọc */
-    }
+	.feature-item {
+		background: #fff;
+		border: 1.5px solid #05a94e;
+		border-radius: 8px;
+		padding: 18px 28px;
+		display: flex;
+		height: 100%;
+		align-items: center;
+		gap: 14px;
+		min-width: 210px;
+		font-size: 15px;
+	}
 
-    .image-frame {
-        width: 100%;
-        max-width: 1200px; /* Giới hạn chiều rộng tối đa */
-        height: 100%;
-        border: 2px solid #e5e5e5; /* Khung viền đồng đều */
-        border-radius: 8px; /* Bo góc */
-        overflow: hidden; /* Ẩn phần thừa của hình ảnh */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #fff; /* Nền trắng cho khung */
-    }
+	.feature-item i {
+		color: #07a54b;
+		font-size: 32px;
+	}
 
-        .image-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Đảm bảo hình ảnh lấp đầy khung */
-            object-position: center; /* Căn giữa nội dung hình ảnh */
-            display: block;
-        }
+	.feature-title {
+		font-weight: 600;
+		color: #07a54b;
+		font-size: 15px;
+	}
 
-    .carousel-indicators [data-bs-target] {
-        background-color: #fff;
-        opacity: 0.7;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-    }
+	.feature-desc {
+		color: #07a54b;
+		font-size: 14px;
+	}
 
-    .carousel-indicators .active {
-        background-color: #ff5e57;
-        opacity: 1;
-    }
+	.text-center {
+		text-decoration: none;
+	}
 
-    .carousel-control-prev,
-    .carousel-control-next {
-        width: 5%;
-    }
+	.text-center:hover {
+		color: #07a54b;
+	}
 
-    .carousel-control-prev-icon,
-    .carousel-control-next-icon {
-        background-color: rgba(0, 0, 0, 0.5);
-        border-radius: 5px;
-        padding: 20px;
-    }
+	.book-tabs {
+		display: flex;
+		gap: 10px;
+		margin-top: 60px;
+		margin-bottom: 20px;
+		justify-content: center;
+	}
 
-    .category-section .category-title {
-        font-size: 24px;
-        font-weight: bold;
-        color: #333;
-        text-transform: uppercase;
-        padding: 0 0 25px 0; /* Khoảng cách 0,5cm (5px) với card sách */
-        text-align: center; /* Căn trái */
-    }
+	.tab-btn {
+		padding: 8px 20px;
+		border: 1px solid #07a54b;
+		background: #fff;
+		color: #07a54b;
+		font-weight: 600;
+		cursor: pointer;
+		outline: none;
+		transition: background 0.2s, color 0.2s;
+	}
 
-    .category-section .row {
-        margin-top: 0; /* Xóa margin-top của row để sát vào tên loại */
-    }
+	.tab-btn.active, .tab-btn:hover {
+		background: #07a54b;
+		color: #fff;
+	}
 
-    .single-product {
-        border: 1px solid #e5e5e5;
-        border-radius: 8px;
-        overflow: hidden;
-        transition: transform 0.3s ease;
-        background-color: #fff; /* Nền trắng cho card */
-        min-height: 350px; /* Chiều cao tối thiểu để đồng đều */
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        padding: 0;
-        margin: 0;
-    }
+	.tab-content {
+		display: none;
+	}
 
-        .single-product:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+	.tab-content.active {
+		display: block;
+	}
 
-    .product-img {
-        display: flex; /* Sử dụng flexbox để căn giữa */
-        justify-content: center; /* Căn giữa ngang */
-        align-items: center; /* Căn giữa dọc */
-        padding: 0px; /* Khoảng đệm đồng đều */
-        background-color: #f8f8f8; /* Nền khung đồng đều với carousel */
-        width: 100%;
-        height: 200px;
-    }
+	.fade-in {
+		opacity: 0;
+		transform: translateY(30px);
+		animation: fadeInUp 0.7s forwards;
+	}
 
-    .image-frame-product {
-        width: 100%;
-        height: 200px; /* Chiều cao cố định cho khung sản phẩm */
-        /*border: 2px solid #e5e5e5;*/ /* Khung viền đồng đều với carousel */
-        /*border-radius: 8px;*/ /* Bo góc đồng đều */
-        /*overflow: hidden;*/ /* Ẩn phần thừa của hình ảnh */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #fff;
-        padding: 5px; /* Khoảng đệm nhỏ hơn cho sản phẩm */
-    }
+	keyframes fadeInUp {
+	to
 
-        .image-frame-product img {
-            width: 100%; /* Đảm bảo hình ảnh lấp đầy khung */
-            height: 100%;
-            object-fit: cover; /* Đảm bảo hình ảnh lấp đầy khung */
-            object-position: center; /* Căn giữa nội dung hình ảnh */
-            padding: 0;
-            margin: 0;
-            display: block;
-        }
-
-    .product-content {
-        padding: 15px;
-        flex-grow: 1; /* Đảm bảo nội dung mở rộng để lấp đầy không gian */
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 120px; /* Chiều cao tối thiểu để đồng đều */
-    }
-
-    .product-title {
-        font-size: 18px !important;
-        font-weight: 600;
-        color: #333;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.4; /* Khoảng cách dòng đồng đều */
-        margin-bottom: 10px; /* Khoảng cách với giá */
-        text-align: center;
-    }
-
-    .product-price {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: 30px; /* Đảm bảo giá có không gian cố định */
-    }
-
-        .product-price .price {
-            font-size: 18px;
-            color: #07a54b;
-            font-weight: bold;
-        }
-
-        .product-price .out-of-stock {
-            font-size: 18px; /* Đồng bộ với giá */
-            color: #07a54b; /* Đồng bộ màu với giá */
-            font-weight: bold;
-        }
-
-    .book-features {
-        display: flex;
-        justify-content: center;
-        align-items: stretch;
-        gap: 30px;
-        margin: 30px 0;
-        flex-wrap: nowrap; /* Prevent wrapping to a new line */
-        width: 100%;
-    }
-
-    .feature-item {
-        background: #fff;
-        border: 1.5px solid #05a94e;
-        border-radius: 8px;
-        padding: 18px 28px;
-        display: flex;
-        height: 100%;
-        align-items: center;
-        gap: 14px;
-        min-width: 210px;
-        font-size: 15px;
-    }
-
-        .feature-item i {
-            color: #07a54b;
-            font-size: 32px;
-        }
-
-    .feature-title {
-        font-weight: 600;
-        color: #07a54b;
-        font-size: 15px;
-    }
-
-    .feature-desc {
-        color: #07a54b;
-        font-size: 14px;
-    }
-
-    .text-center {
-        text-decoration: none;
-    }
-
-        .text-center:hover {
-            color: #07a54b;
-        }
-
-    .book-tabs {
-        display: flex;
-        gap: 10px;
-        margin-top: 60px;
-        margin-bottom: 20px;
-        justify-content: center;
-    }
-
-    .tab-btn {
-        padding: 8px 20px;
-        border: 1px solid #07a54b;
-        background: #fff;
-        color: #07a54b;
-        font-weight: 600;
-        cursor: pointer;
-        outline: none;
-        transition: background 0.2s, color 0.2s;
-    }
-
-        .tab-btn.active, .tab-btn:hover {
-            background: #07a54b;
-            color: #fff;
-        }
-
-    .tab-content {
-        display: none;
-    }
-
-        .tab-content.active {
-            display: block;
-        }
-
-    .fade-in {
-        opacity: 0;
-        transform: translateY(30px);
-        animation: fadeInUp 0.7s forwards;
-    }
-
-    keyframes fadeInUp {
-        to
-
-    {
-        opacity: 1;
-        transform: none;
-    }
-    }
+	{
+		opacity: 1;
+		transform: none;
+	}
+	}
+	
+	
 </style>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var myCarousel = document.querySelector('#heroCarousel');
-        var carousel = new bootstrap.Carousel(myCarousel, {
-            interval: 5000, // Thời gian chuyển slide (5 giây)
-            pause: 'hover', // Tạm dừng khi di chuột vào
-            wrap: true // Lặp lại slider
-        });
+    $(document).ready(function() {
+    // Khởi tạo carousel với auto-slide 4 giây
+    $('#heroCarousel').carousel({
+        interval: 4000, // 4 giây
+        wrap: true,     // Lặp lại từ đầu khi hết slide
+        keyboard: true, // Cho phép điều khiển bằng phím
+        pause: 'hover'  // Dừng khi hover
     });
+    
+    // Hiệu ứng fade cho text khi chuyển slide
+    $('#heroCarousel').on('slide.bs.carousel', function (e) {
+        var $animatingElements = $(e.relatedTarget).find('.carousel-caption');
+        $animatingElements.addClass('animated fadeInUp');
+    });
+    
+    $('#heroCarousel').on('slid.bs.carousel', function (e) {
+        var $animatingElements = $(e.relatedTarget).find('.carousel-caption');
+        $animatingElements.removeClass('animated fadeInUp');
+    });
+});
 </script>
 @section Scripts {
     <script src="~/Scripts/book-common.js"></script>
