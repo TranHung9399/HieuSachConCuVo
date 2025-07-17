@@ -92,7 +92,14 @@
         <div class="tab-content p-4 border-bottom border-start border-end rounded-bottom" id="productTabContent">
             <div class="tab-pane fade show active" id="desc" role="tabpanel">
                 <h4 class="fw-bold mb-2">Nội dung:</h4>
-                <div>@Html.Raw(Model.MoTa?.Replace("\n", "<br />").Replace("\r", ""))</div>
+                @if (string.IsNullOrWhiteSpace(Model.MoTa))
+                {
+                    <div style="color: #888; font-style: italic;">Đang cập nhật nội dung</div>
+                }
+                else
+                {
+                    <div>@Html.Raw(Model.MoTa.Replace("\n", "<br />").Replace("\r", ""))</div>
+                }
             </div>
             <div class="tab-pane fade" id="review" role="tabpanel">
                 <p>Chức năng bình luận sẽ cập nhật sau.</p>

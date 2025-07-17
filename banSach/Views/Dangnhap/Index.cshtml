@@ -207,38 +207,32 @@
     }
 </style>
 
-<div class="custom-toast-wrapper">
-    @if (TempData["Success"] != null)
-    {
-        <div class="custom-toast success-toast">
-            <i class="toast-icon fas fa-check-circle"></i>
-            <span class="toast-message">@TempData["Success"]</span>
-            <i class="toast-close fas fa-times" onclick="this.parentElement.remove()"></i>
-        </div>
-    }
-    @if (TempData["Error"] != null)
-    {
-        <div class="custom-toast error-toast">
-            <i class="toast-icon fas fa-exclamation-circle"></i>
-            <span class="toast-message">@TempData["Error"]</span>
-            <i class="toast-close fas fa-times" onclick="this.parentElement.remove()"></i>
-        </div>
-    }
-</div>
 <!-- LOGIN FORM -->
 <div class="login-page-bg">
     <div class="login-title">ĐĂNG NHẬP</div>
     <div class="login-box">
+        @if (TempData["Success"] != null)
+        {
+            <div style="background: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 12px 20px; border-radius: 6px; margin-bottom: 16px; text-align: center; font-weight: bold; font-size: 16px;">
+                @TempData["Success"]
+            </div>
+        }
         @using (Html.BeginForm("Index", "Dangnhap", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
+            if (TempData["Error"] != null)
+            {
+                <div style="color: red; font-weight: bold; margin-bottom: 10px; text-align:left;">
+                    @Html.Raw(TempData["Error"])
+                </div>
+            }
             <div class="input-group">
                 <span class="input-group-icon"><i class="fa fa-envelope"></i></span>
-                <input type="text" name="Username" id="Username" placeholder="Email" class="form-control" />
+                <input type="email" name="Username" id="Username" placeholder="Email" class="form-control" required />
             </div>
             <div class="input-group password-container">
                 <span class="input-group-icon"><i class="fa fa-lock"></i></span>
-                <input type="password" name="Password" id="Password" placeholder="Mật khẩu" class="form-control" />
+                <input type="password" name="Password" id="Password" placeholder="Mật khẩu" class="form-control" required />
                 <i class="fa fa-eye toggle-password" id="togglePassword"></i>
             </div>
             <input type="submit" value="Đăng nhập" class="btn-login" />

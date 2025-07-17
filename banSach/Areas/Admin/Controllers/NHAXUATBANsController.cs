@@ -17,25 +17,27 @@ namespace bansach.Areas.Admin.Controllers
         private QLBanSachEntities db = new QLBanSachEntities();
 
         // GET: Admin/NhaXuatBans
-        public async Task<ActionResult> Index(int ? page)
+        public ActionResult Index(int? page, string searchString, string searchType)
         {
-            if (Session["AdminUser"] == null)
+            var nxb = db.NhaXuatBans.AsQueryable();
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentSearchType = searchType ?? "name";
+
+            if (!string.IsNullOrEmpty(searchString))
             {
-                return RedirectToAction("Index", "Login", new { area = "Admin" });
+                if (searchType == "id")
+                {
+                    nxb = nxb.Where(n => n.MaNXB.Contains(searchString));
+                }
+                else
+                {
+                    nxb = nxb.Where(n => n.TenNXB.Contains(searchString));
+                }
             }
 
-            var user = Session["AdminUser"] as NhanVien;
-            if (user == null)
-            {
-                return RedirectToAction("Index", "Login", new { area = "Admin" });
-            }
-
-            ViewBag.HoTen = user.HoTen;
-            int pageSize = 5; // số lượng mục trên mỗi trang
-            int pageNumber = (page ?? 1); // trang hiện tại (mặc định là 1)
-
-            var danhSach = db.NhaXuatBans.OrderBy(nxb => nxb.MaNXB).ToPagedList(pageNumber, pageSize);
-            return View(danhSach);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(nxb.OrderBy(n => n.MaNXB).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Admin/NhaXuatBans/Details/5

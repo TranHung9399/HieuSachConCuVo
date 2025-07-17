@@ -15,38 +15,27 @@ namespace bansach.Areas.Admin.Controllers
         private QLBanSachEntities db = new QLBanSachEntities();
 
         // GET: Admin/NhanViens
-        public async Task<ActionResult> Index(int? page)
+        public ActionResult Index(int? page, string searchString, string searchType)
         {
-            if (Session["AdminUser"] == null)
+            var nhanViens = db.NhanViens.Include(n => n.ChucVu);
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentSearchType = searchType ?? "name";
+
+            if (!string.IsNullOrEmpty(searchString))
             {
-                return RedirectToAction("Index", "Login", new { area = "Admin" });
+                if (searchType == "id")
+                {
+                    nhanViens = nhanViens.Where(n => n.MaNhanVien.Contains(searchString));
+                }
+                else
+                {
+                    nhanViens = nhanViens.Where(n => n.HoTen.Contains(searchString));
+                }
             }
 
-            var user = Session["AdminUser"] as NhanVien;
-            if (user == null)
-            {
-                return RedirectToAction("Index", "Login", new { area = "Admin" });
-            }
-
-            ViewBag.HoTen = user.HoTen;
-
-            int pageSize = 5; // Số lượng mục trên mỗi trang
-            int pageNumber = page ?? 1; // Trang hiện tại, mặc định là 1
-
-            var danhSach = await db.NhanViens
-         .Include(nv => nv.ChucVu)
-         .OrderBy(nv => nv.HoTen)
-         .Skip((pageNumber - 1) * pageSize) // Bỏ qua các bản ghi của trang trước
-         .Take(pageSize) // Lấy số bản ghi tương ứng với pageSize
-         .ToListAsync();
-
-            // Đếm tổng số bản ghi để tính số trang
-            var totalItemCount = await db.NhanViens.CountAsync();
-
-            // Tạo đối tượng PagedList từ danh sách đã lấy
-            var pagedList = new StaticPagedList<NhanVien>(danhSach, pageNumber, pageSize, totalItemCount);
-
-            return View(pagedList);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(nhanViens.OrderBy(n => n.MaNhanVien).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Admin/NhanViens/Details/5

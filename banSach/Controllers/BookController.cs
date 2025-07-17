@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 
 namespace banSach.Controllers
 {
@@ -13,8 +14,10 @@ namespace banSach.Controllers
     {
         private QLBanSachEntities db = new QLBanSachEntities();
         // GET: Book
-        public ActionResult Index(String id, string type, string sort)
+        public ActionResult Index(String id, string type, string sort, int? page)
         {
+            int pageSize = 12;
+            int pageNumber = page ?? 1;
             ViewBag.SidebarCategories = db.Loais.Where(l => l.Status == 1).ToList();
 
             // Nếu có type là 'new' hoặc 'bestseller' thì hiển thị tương ứng
@@ -23,8 +26,8 @@ namespace banSach.Controllers
                 if (type == "new")
                 {
                     ViewBag.Category = new Loai { TenLoai = "Sách mới nhất" };
-                    var books = db.Saches.Where(s => s.Status == 1).OrderByDescending(s => s.NgayNhapHang).ToList();
-                    return View(books);
+                    var books = db.Saches.Where(s => s.Status == 1).OrderByDescending(s => s.NgayNhapHang);
+                    return View(books.ToPagedList(pageNumber, pageSize));
                 }
                 if (type == "bestseller")
                 {
@@ -46,8 +49,8 @@ namespace banSach.Controllers
                     var books = bestSellerIds
                         .Select(bookId => bestSellerBooks.FirstOrDefault(s => s.MaSach == bookId))
                         .Where(s => s != null)
-                        .ToList();
-                    return View(books);
+                        .AsQueryable();
+                    return View(books.ToPagedList(pageNumber, pageSize));
                 }
             }
 
@@ -78,7 +81,6 @@ namespace banSach.Controllers
                         books = books.OrderByDescending(s => s.TenSach);
                         break;
                     case "banchay":
-                        // Sắp xếp bán chạy nhất
                         var bestSellerIds = db.ChiTietDonHangs
                             .Where(ct => ct.Sach.Status == 1)
                             .GroupBy(ct => ct.MaSach)
@@ -100,7 +102,7 @@ namespace banSach.Controllers
                         break;
                 }
 
-                return View(books.ToList());
+                return View(books.ToPagedList(pageNumber, pageSize));
             }
 
             // Logic cũ: hiển thị theo thể loại
@@ -109,27 +111,27 @@ namespace banSach.Controllers
             {
                 return HttpNotFound();
             }
-            var booksByCategory = db.Saches.Where(s => s.MaLoai == id && s.Status == 1).ToList();
+            var booksByCategory = db.Saches.Where(s => s.MaLoai == id && s.Status == 1);
 
             switch (sort)
             {
                 case "moinhat":
-                    booksByCategory = booksByCategory.OrderByDescending(s => s.NgayNhapHang).ToList();
+                    booksByCategory = booksByCategory.OrderByDescending(s => s.NgayNhapHang);
                     break;
                 case "cunhat":
-                    booksByCategory = booksByCategory.OrderBy(s => s.NgayNhapHang).ToList();
+                    booksByCategory = booksByCategory.OrderBy(s => s.NgayNhapHang);
                     break;
                 case "giatangdan":
-                    booksByCategory = booksByCategory.OrderBy(s => s.GiaBan).ToList();
+                    booksByCategory = booksByCategory.OrderBy(s => s.GiaBan);
                     break;
                 case "giagiamdan":
-                    booksByCategory = booksByCategory.OrderByDescending(s => s.GiaBan).ToList();
+                    booksByCategory = booksByCategory.OrderByDescending(s => s.GiaBan);
                     break;
                 case "tenaz":
-                    booksByCategory = booksByCategory.OrderBy(s => s.TenSach).ToList();
+                    booksByCategory = booksByCategory.OrderBy(s => s.TenSach);
                     break;
                 case "tenza":
-                    booksByCategory = booksByCategory.OrderByDescending(s => s.TenSach).ToList();
+                    booksByCategory = booksByCategory.OrderByDescending(s => s.TenSach);
                     break;
                 case "banchay":
                     var bestSellerIds = db.ChiTietDonHangs
@@ -146,15 +148,15 @@ namespace banSach.Controllers
                     booksByCategory = bestSellerIds
                         .Select(bookId => bestSellerBooks.FirstOrDefault(s => s.MaSach == bookId))
                         .Where(s => s != null)
-                        .ToList();
+                        .AsQueryable();
                     break;
                 default:
-                    booksByCategory = booksByCategory.OrderByDescending(s => s.NgayNhapHang).ToList();
+                    booksByCategory = booksByCategory.OrderByDescending(s => s.NgayNhapHang);
                     break;
             }
 
             ViewBag.Category = category;
-            return View(booksByCategory.ToList());
+            return View(booksByCategory.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Details(string id)

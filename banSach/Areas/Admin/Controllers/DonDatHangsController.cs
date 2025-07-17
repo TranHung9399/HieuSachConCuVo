@@ -106,7 +106,7 @@ namespace banSach.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
         // GET: Admin/DonDatHangs
-        public ActionResult Index(int ?page)
+        public ActionResult Index(int? page, string searchString, string searchType)
         {
             if (Session["AdminUser"] == null)
             {
@@ -120,11 +120,24 @@ namespace banSach.Areas.Admin.Controllers
             }
 
             ViewBag.HoTen = user.HoTen;
-            var donDatHangs = db.DonDatHangs.Include(d => d.ChiTietDonHangs).ToList();
-            int pageSize = 5; // số lượng mục trên mỗi trang
-            int pageNumber = (page ?? 1); // trang hiện tại (mặc định là 1)
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentSearchType = searchType ?? "name";
 
-            var danhSach = db.DonDatHangs.OrderBy(hd => hd.MaDonHang).ToPagedList(pageNumber, pageSize);
+            var donDatHangs = db.DonDatHangs.Include(d => d.ChiTietDonHangs).AsQueryable();
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                if (searchType == "id")
+                {
+                    donDatHangs = donDatHangs.Where(d => d.MaDonHang.Contains(searchString));
+                }
+                else
+                {
+                    donDatHangs = donDatHangs.Where(d => d.HoTen.Contains(searchString));
+                }
+            }
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            var danhSach = donDatHangs.OrderBy(hd => hd.MaDonHang).ToPagedList(pageNumber, pageSize);
             return View(danhSach);
         }
 

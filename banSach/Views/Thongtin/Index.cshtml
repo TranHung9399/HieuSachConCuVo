@@ -92,14 +92,29 @@
         justify-content: space-between;
     }
 
-        .alert-box.success {
-            background: #d4edda;
-            color: #155724;
+        .alert-box.success, .alert-box.error {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+            text-align: center;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            box-shadow: none;
+            width: 100%;
         }
 
         .alert-box.error {
-            background: #f8d7da;
-            color: #721c24;
+            background: #fff;
+            color: #e53935;
+            text-align: center;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            box-shadow: none;
         }
 
         .alert-box .close-btn {
@@ -124,28 +139,22 @@
         <div class="tab-pane fade show active" id="thongtin">
             <h4 style="text-align: center; margin-bottom: 30px;">Thông Tin Cá Nhân</h4>
 
-            @if (TempData["SuccessMessage"] != null)
-            {
-                <div class="alert-box success" id="success-alert">
-                    <span class="icon">✔</span>
-                    <span>@TempData["SuccessMessage"]</span>
-                    <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-                </div>
-            }
-
-            @if (TempData["ErrorMessage"] != null)
-            {
-                <div class="alert-box error" id="error-alert">
-                    <span class="icon">✖</span>
-                    <span>@TempData["ErrorMessage"]</span>
-                    <button class="close-btn" onclick="this.parentElement.style.display='none';">×</button>
-                </div>
-            }
-
             @using (Html.BeginForm("Edit", "Thongtin", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
                 @Html.HiddenFor(model => model.MaKH)
+                if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert-box success" id="success-alert">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+                if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert-box error" id="error-alert">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
 
                 <div class="form-group">
                     <label for="HoTen">Họ Tên</label>

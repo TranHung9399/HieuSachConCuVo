@@ -10,6 +10,17 @@
         <br />
         <h2>Thống Kê Doanh Thu</h2>
 
+        <div class="mb-3 d-flex justify-content-end">
+            <select id="quick-range-select" class="form-select" style="max-width: 220px;">
+                <option value="">Chọn mốc thời gian</option>
+                <option value="thisMonth">Tháng này</option>
+                <option value="thisQuarter">Quý này</option>
+                <option value="thisYear">Năm nay</option>
+                <option value="7days">7 ngày qua</option>
+                <option value="30days">30 ngày qua</option>
+            </select>
+        </div>
+
         <div class="card mb-4">
             <div class="card-body">
                 @using (Html.BeginForm("Index", "Thongke", FormMethod.Get))
@@ -28,6 +39,7 @@
                             <select name="loaiThongKe" class="form-control" style="width:200px">
                                 <option value="ngay" @(Model.LoaiThongKe == "ngay" ? "selected" : "")>Ngày</option>
                                 <option value="thang" @(Model.LoaiThongKe == "thang" ? "selected" : "")>Tháng</option>
+                                <option value="nam" @(Model.LoaiThongKe == "nam" ? "selected" : "")>Năm</option>
                             </select>
                         </div>
                     </div>
@@ -41,14 +53,24 @@
         </div>
 
         <div class="card mb-4">
-            <div class="card-header">
-                <h4 class="card-title">Chi Tiết Doanh Thu</h4>
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0">Chi Tiết Doanh Thu</h4>
+                <div class="d-flex gap-2">
+                    <a href="@Url.Action("ExportExcel", new { loaiThongKe = Model.LoaiThongKe, ngayBatDau = Model.NgayBatDau.ToString("yyyy-MM-dd"), ngayKetThuc = Model.NgayKetThuc.ToString("yyyy-MM-dd") })" class="btn btn-success">
+                        <i class="fa fa-file-excel"></i> Xuất Excel
+                    </a>
+                    <a href="@Url.Action("ExportPdf", new { loaiThongKe = Model.LoaiThongKe, ngayBatDau = Model.NgayBatDau.ToString("yyyy-MM-dd"), ngayKetThuc = Model.NgayKetThuc.ToString("yyyy-MM-dd") })" class="btn btn-danger">
+                        <i class="fa fa-file-pdf"></i> Xuất PDF
+                    </a>
+                </div>
             </div>
             <div class="card-body">
                 <table id="datatablesSimple" class="table table-bordered table-hover">
                     <thead class="table-light">
                         <tr>
-                            <th>@(Model.LoaiThongKe == "ngay" ? "Ngày" : "Tháng")</th>
+                            <th>
+                                @(Model.LoaiThongKe == "ngay" ? "Ngày" : (Model.LoaiThongKe == "thang" ? "Tháng" : "Năm"))
+                            </th>
                             <th>Số Đơn Hàng</th>
                             <th>Doanh Thu</th>
                         </tr>
@@ -90,6 +112,11 @@
             <!-- Chuẩn bị dữ liệu cho biểu đồ -->
             <script>
                 document.addEventListener('DOMContentLoaded', function () {
+                    function setDateRange(start, end) {
+                        document.querySelector('input[name="ngayBatDau"]').value = start;
+                        document.querySelector('input[name="ngayKetThuc"]').value = end;
+                    }
+                    function pad(n) { return n < 10 ? '0' + n : n; }
                     // Kiểm tra Chart.js đã tải chưa
                     if (typeof Chart === 'undefined') {
                         console.error('Chart.js không được tải. Vui lòng kiểm tra kết nối internet hoặc CDN.');
@@ -105,7 +132,7 @@
                     console.log('Data:', data);
 
                     // Nhãn trục X với mã hóa đúng
-                    const xAxisLabel = '@Html.Raw(HttpUtility.HtmlDecode(Model.LoaiThongKe == "ngay" ? "Ngày" : "Tháng"))';
+                    const xAxisLabel = '@Html.Raw(HttpUtility.HtmlDecode(Model.LoaiThongKe == "ngay" ? "Ngày" : (Model.LoaiThongKe == "thang" ? "Tháng" : "Năm"))))';
 
                     // Vẽ biểu đồ cột bằng Chart.js
                     const ctx = document.getElementById('revenueChart').getContext('2d');
@@ -205,3 +232,52 @@
         background-color: #e9ecef;
     }
 </style>
+
+<!-- Script chọn nhanh mốc thời gian -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function setDateRange(start, end) {
+        var inputStart = document.querySelector('input[name="ngayBatDau"]');
+        var inputEnd = document.querySelector('input[name="ngayKetThuc"]');
+        if (inputStart && inputEnd) {
+            inputStart.value = start;
+            inputEnd.value = end;
+        }
+    }
+    function pad(n) { return n < 10 ? '0' + n : n; }
+    var select = document.getElementById('quick-range-select');
+    if (select) {
+        select.addEventListener('change', function() {
+            const today = new Date();
+            let start, end;
+            end = today.toISOString().slice(0,10);
+            if (!select.value) return; // Không làm gì nếu chọn option đầu
+            switch (select.value) {
+                case 'thisMonth':
+                    start = today.getFullYear() + '-' + pad(today.getMonth() + 1) + '-01';
+                    break;
+                case 'thisQuarter':
+                    var quarter = Math.floor((today.getMonth()) / 3);
+                    start = today.getFullYear() + '-' + pad(quarter * 3 + 1) + '-01';
+                    break;
+                case 'thisYear':
+                    start = today.getFullYear() + '-01-01';
+                    break;
+                case '7days':
+                    var d7 = new Date(today);
+                    d7.setDate(today.getDate() - 6);
+                    start = d7.toISOString().slice(0,10);
+                    break;
+                case '30days':
+                    var d30 = new Date(today);
+                    d30.setDate(today.getDate() - 29);
+                    start = d30.toISOString().slice(0,10);
+                    break;
+                default:
+                    return;
+            }
+            setDateRange(start, end);
+        });
+    }
+});
+</script>

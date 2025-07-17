@@ -31,7 +31,7 @@ namespace bansach.Areas.Admin.Controllers
 
 
         // GET: Admin/Saches
-        public async Task<ActionResult> Index(int? page)
+        public async Task<ActionResult> Index(int? page, string searchString, string searchType)
         {
             if (Session["AdminUser"] == null)
             {
@@ -45,11 +45,27 @@ namespace bansach.Areas.Admin.Controllers
             }
 
             ViewBag.HoTen = user.HoTen;
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentSearchType = searchType ?? "name";
+
             var sach = db.Saches.Include(s => s.Loai).Include(s => s.NhaXuatBan);
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                if (searchType == "id")
+                {
+                    sach = sach.Where(s => s.MaSach.Contains(searchString));
+                }
+                else // mặc định tìm theo tên
+                {
+                    sach = sach.Where(s => s.TenSach.Contains(searchString));
+                }
+            }
+
             int pageSize = 5; // số lượng mục trên mỗi trang
             int pageNumber = (page ?? 1); // trang hiện tại (mặc định là 1)
 
-            var danhSach = db.Saches.OrderBy(s => s.MaSach).ToPagedList(pageNumber, pageSize);
+            var danhSach = sach.OrderBy(s => s.MaSach).ToPagedList(pageNumber, pageSize);
             return View(danhSach);
         }
 

@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="@Url.Content("~/css/book.css")" />
     @Html.Partial("_CustomToast")}
 
+@if (TempData["Success"] != null)
+{
+}
+
 <!-- Slider banner full width -->
 <section class="hero-slider" id="hero-slider">
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
@@ -391,7 +395,7 @@
 	}
 	}
 	
-	
+	.hero-slider { display: none; }
 </style>
 
 <script>
@@ -415,7 +419,9 @@
         $animatingElements.removeClass('animated fadeInUp');
     });
 });
+
 </script>
+
 @section Scripts {
     <script src="~/Scripts/book-common.js"></script>
     <script>
@@ -465,4 +471,5 @@
             $('.tab-btn').first().click();
         });
     </script>
+    
 }

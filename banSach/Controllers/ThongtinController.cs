@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using System.Data.Entity;
+using PagedList;
 
 namespace banSach.Controllers
 {
@@ -52,6 +53,19 @@ namespace banSach.Controllers
                     Session.Clear();
                     TempData["ErrorMessage"] = "Thông tin tài khoản không tồn tại!";
                     return RedirectToAction("Index", "Dangnhap");
+                }
+
+                // Kiểm tra trùng số điện thoại
+                if (!string.IsNullOrEmpty(model.SoDienThoai) && db.KhachHangs.Any(kh => kh.SoDienThoai == model.SoDienThoai && kh.MaKH != maKH))
+                {
+                    TempData["ErrorMessage"] = "Số điện thoại đã được sử dụng!";
+                    return View("Index", model);
+                }
+                // Kiểm tra trùng email
+                if (!string.IsNullOrEmpty(model.Email) && db.KhachHangs.Any(kh => kh.Email == model.Email && kh.MaKH != maKH))
+                {
+                    TempData["ErrorMessage"] = "Email đã được sử dụng!";
+                    return View("Index", model);
                 }
 
                 khachHang.HoTen = model.HoTen;
@@ -131,7 +145,7 @@ namespace banSach.Controllers
         }
 
         // GET: Thongtin/DonHang
-        public ActionResult DonHang()
+        public ActionResult DonHang(int? page)
         {
             if (Session["KhachHang"] == null)
             {
@@ -141,23 +155,26 @@ namespace banSach.Controllers
 
             var hoTen = Session["HoTen"]?.ToString();
             var donHangs = db.DonDatHangs
-                            .Include(dh => dh.ChiTietDonHangs) // Sử dụng lambda đúng cách
+                            .Include(dh => dh.ChiTietDonHangs)
                             .Where(dh => dh.HoTen == hoTen)
-                            .OrderByDescending(dh => dh.NgayDat)
-                            .ToList();
+                            .OrderByDescending(dh => dh.NgayDat);
+
+            // Phân trang: mỗi trang 4 đơn hàng
+            int pageSize = 4;
+            int pageNumber = page ?? 1;
+            var pagedDonHangs = donHangs.ToPagedList(pageNumber, pageSize);
 
             // Tạo Dictionary để lưu tổng tiền cho mỗi đơn hàng
             var tongTienDict = new Dictionary<string, decimal>();
-            foreach (var dh in donHangs)
+            foreach (var dh in pagedDonHangs)
             {
                 var tongTien = dh.ChiTietDonHangs
                                 .Sum(ct => (ct.SoLuong ?? 0) * (ct.DonGia ?? 0));
                 tongTienDict[dh.MaDonHang] = tongTien;
             }
 
-            // Truyền danh sách đơn hàng và Dictionary tổng tiền sang view
             ViewBag.TongTienDict = tongTienDict;
-            return View(donHangs);
+            return View(pagedDonHangs);
         }
 
         public ActionResult HuyDonHang(string id)

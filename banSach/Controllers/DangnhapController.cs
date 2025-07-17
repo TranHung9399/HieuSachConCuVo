@@ -78,6 +78,7 @@ namespace banSach.Controllers
 					db.SaveChanges();
 					Session["Cart"] = null; // Xoá session sau khi merge
 				}
+                TempData["Success"] = "Đăng nhập thành công!";
 return RedirectToAction("Index", "Home");
             }
             else

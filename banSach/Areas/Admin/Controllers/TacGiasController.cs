@@ -17,25 +17,27 @@ namespace banSach.Areas.Admin.Controllers
         private QLBanSachEntities db = new QLBanSachEntities();
 
         // GET: Admin/TacGias
-        public ActionResult Index(int ?page)
+        public ActionResult Index(int? page, string searchString, string searchType)
         {
-            if (Session["AdminUser"] == null)
+            var tacGias = db.TacGias.AsQueryable();
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentSearchType = searchType ?? "name";
+
+            if (!string.IsNullOrEmpty(searchString))
             {
-                return RedirectToAction("Index", "Login", new { area = "Admin" });
+                if (searchType == "id")
+                {
+                    tacGias = tacGias.Where(t => t.MaTG.Contains(searchString));
+                }
+                else
+                {
+                    tacGias = tacGias.Where(t => t.TenTG.Contains(searchString));
+                }
             }
 
-            var user = Session["AdminUser"] as NhanVien;
-            if (user == null)
-            {
-                return RedirectToAction("Index", "Login", new { area = "Admin" });
-            }
-
-            ViewBag.HoTen = user.HoTen;
-            int pageSize = 5; // số lượng mục trên mỗi trang
-            int pageNumber = (page ?? 1); // trang hiện tại (mặc định là 1)
-
-            var danhSach = db.TacGias.OrderBy(tg => tg.MaTG).ToPagedList(pageNumber, pageSize);
-            return View(danhSach);
+            int pageSize = 5;
+            int pageNumber = (page ?? 1);
+            return View(tacGias.OrderBy(t => t.MaTG).ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Admin/TacGias/Details/5

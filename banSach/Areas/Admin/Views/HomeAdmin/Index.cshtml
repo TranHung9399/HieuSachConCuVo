@@ -3,6 +3,29 @@
     ViewBag.Title = "Trang chủ Admin";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
+<style>
+.card-stat i, .card .fa-solid {
+    display: block;
+    margin: 0 auto 8px auto;
+    font-size: 2rem !important;
+}
+.card-title {
+    font-size: 1rem;
+    white-space: normal;
+    word-break: break-word;
+}
+.stat-label {
+    font-size: 1rem;
+    font-weight: 500;
+    word-break: break-word;
+}
+.card-stat {
+    padding: 18px 0 !important;
+}
+.card .card-body {
+    padding: 10px 5px !important;
+}
+</style>
 <div>
     @if (TempData["SuccessMessage"] != null)
     {
@@ -22,13 +45,45 @@
     }
 </div>
 <main>
-    <div class="container-fluid px-4" style="min-height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <div class="container-fluid px-4">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="welcome-box p-4 rounded shadow-sm bg-white d-flex align-items-center mb-3">
+                    <img src="~/img/logo/logoo.jpg" style="width:60px; height:60px; object-fit:contain; margin-right:20px;" alt="Logo" />
+                    <div>
+                        <h4 class="mb-1 text-success">Chào mừng bạn đến với trang quản trị Hiệu Sách Con Cú Vọ!</h4>
+                        <div style="font-size:15px; color:#555;">"Một cuốn sách hay cho ta một điều tốt, một người bạn tốt cho ta một điều hay." – Nguyễn Bá Học</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="col-md-4 mb-3">
+                <div class="card-stat d-flex flex-row align-items-center justify-content-center" style="gap:8px;">
+                    <i class="fa-solid fa-book" style="color:#388e3c; font-size:2rem;"></i>
+                    <div>
+                        <div class="stat-number" style="font-size: 2rem;">@ViewBag.TongSach</div>
+                        <div class="stat-label text-center">Sách trong kho</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card-stat d-flex flex-row align-items-center justify-content-center" style="gap:8px;">
+                    <i class="fa-solid fa-users" style="color:#1976d2; font-size:2rem;"></i>
+                    <div>
+                        <div class="stat-number" style="font-size: 2rem;">@ViewBag.TongKhachHang</div>
+                        <div class="stat-label text-center">Khách hàng</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
         <div class="row justify-content-center">
             <!-- Card 1: Chờ xác nhận - Màu đỏ -->
             <div class="col-md-3 mx-4">
                 <div class="card text-white bg-danger mb-3" style="height: 150px; width: 200px;">
-                    <div class="card-body text-center d-flex flex-column justify-content-center" style="padding: 10px;">
-                        <h5 class="card-title" style="font-size: 1.1rem; margin-bottom: 5px;">Chờ xác nhận</h5>
+                    <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                        <i class="fa-solid fa-clock mb-2"></i>
+                        <h5 class="card-title">Chờ xác nhận</h5>
                         <h3 class="card-text" style="font-size: 2rem; margin-bottom: 5px;">@Model.ChoXacNhan</h3>
                         <p class="card-text" style="font-size: 0.9rem; margin-bottom: 0;">Đơn hàng</p>
                     </div>
@@ -38,8 +93,9 @@
             <!-- Card 2: Đã hủy - Màu đỏ -->
             <div class="col-md-3 mx-4">
                 <div class="card text-white bg-danger mb-3" style="height: 150px; width: 200px;">
-                    <div class="card-body text-center d-flex flex-column justify-content-center" style="padding: 10px;">
-                        <h5 class="card-title" style="font-size: 1.1rem; margin-bottom: 5px;">Đã hủy</h5>
+                    <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                        <i class="fa-solid fa-xmark-circle mb-2"></i>
+                        <h5 class="card-title">Đã hủy</h5>
                         <h3 class="card-text" style="font-size: 2rem; margin-bottom: 5px;">@Model.DaHuy</h3>
                         <p class="card-text" style="font-size: 0.9rem; margin-bottom: 0;">Đơn hàng</p>
                     </div>
@@ -49,8 +105,9 @@
             <!-- Card 3: Đã thanh toán & Hoàn tất - Màu xanh -->
             <div class="col-md-3 mx-4">
                 <div class="card text-white bg-success mb-3" style="height: 150px; width: 200px;">
-                    <div class="card-body text-center d-flex flex-column justify-content-center" style="padding: 10px;">
-                        <h5 class="card-title" style="font-size: 1.1rem; margin-bottom: 5px;">Đã thanh toán & Hoàn tất</h5>
+                    <div class="card-body text-center d-flex flex-column align-items-center justify-content-center">
+                        <i class="fa-solid fa-check-circle mb-2"></i>
+                        <h5 class="card-title">Đã thanh toán & Hoàn tất</h5>
                         <h3 class="card-text" style="font-size: 2rem; margin-bottom: 5px;">@Model.DaThanhToanVaHoanTat</h3>
                         <p class="card-text" style="font-size: 0.9rem; margin-bottom: 0;">Đơn hàng</p>
                     </div>
@@ -59,3 +116,51 @@
         </div>
     </div>
 </main>
+<!-- Slider sách bán chạy nhất -->
+<div class="container mt-5">
+    <h4 class="fw-bold text-center mb-4">SÁCH BÁN CHẠY NHẤT</h4>
+    <div class="bestseller-slider position-relative" style="overflow: hidden; max-width: 1200px; margin: 0 auto;">
+        <div class="bestseller-slider-inner d-flex" style="transition: transform 0.4s cubic-bezier(.4,0,.2,1); will-change: transform;">
+            @if (ViewBag.BestSellerBooks != null)
+            {
+                foreach (var item in ViewBag.BestSellerBooks)
+                {
+                    <div class="bestseller-item text-center mx-2" style="min-width: 180px; max-width: 180px; flex: 0 0 180px; background: #e0e0e0; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 10px 5px 15px 5px;">
+                        <div class="position-relative">
+                            <img src="~/img/sach/@item.Hinh" alt="@item.TenSach" class="img-fluid rounded" style="height: 120px; object-fit: cover;" />
+                        </div>
+                        <div class="mt-2" style="min-height: 48px;">
+                            <span class="text-dark fw-semibold">@item.TenSach</span>
+                        </div>
+                        <div class="text-success fw-bold">
+                            @String.Format("{0:N0}", item.GiaBan)₫
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <button class="slider-btn slider-btn-left" style="position:absolute; left:0; top:50%; transform:translateY(-50%); z-index:2;" onclick="slideBestSeller(-1)"><i class="fa fa-chevron-left"></i></button>
+        <button class="slider-btn slider-btn-right" style="position:absolute; right:0; top:50%; transform:translateY(-50%); z-index:2;" onclick="slideBestSeller(1)"><i class="fa fa-chevron-right"></i></button>
+    </div>
+</div>
+<script>
+    let bestSellerIndex = 0;
+    const bestSellerItemWidth = 190;
+    const bestSellerVisibleCount = 5;
+    function slideBestSeller(dir) {
+        const slider = document.querySelector('.bestseller-slider-inner');
+        const items = document.querySelectorAll('.bestseller-item');
+        const maxIndex = Math.max(0, items.length - bestSellerVisibleCount);
+        bestSellerIndex += dir;
+        if (bestSellerIndex < 0) bestSellerIndex = 0;
+        if (bestSellerIndex > maxIndex) bestSellerIndex = maxIndex;
+        slider.style.transform = `translateX(-${bestSellerIndex * bestSellerItemWidth}px)`;
+    }
+    // Tự động chạy slider
+    setInterval(function() {
+        const items = document.querySelectorAll('.bestseller-item');
+        if (items.length <= bestSellerVisibleCount) return;
+        slideBestSeller(1);
+        if (bestSellerIndex >= items.length - bestSellerVisibleCount) bestSellerIndex = -1;
+    }, 3000);
+</script>

@@ -1,9 +1,11 @@
-﻿@model List<banSach.Models.DonDatHang>
+﻿@model IPagedList<banSach.Models.DonDatHang>
+@using PagedList
+@using PagedList.Mvc
 @{
     ViewBag.Title = "Đơn Hàng Đã Mua";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<link rel="stylesheet" href="@Url.Content("~/css/phantrang.css")" />
 <style>
     .orders-container {
         max-width: 900px;
@@ -146,13 +148,14 @@
                         <td>
                             @if (item.ChiTietDonHangs != null && item.ChiTietDonHangs.Any())
                             {
-                                foreach (var ct in item.ChiTietDonHangs)
+                                var first = item.ChiTietDonHangs.First();
+                                if (first.Sach?.Hinh != null)
                                 {
-                                    if (ct.Sach?.Hinh != null)
-                                    {
-                                        <img src="/img/sach/@ct.Sach.Hinh" alt="@(ct.Sach.TenSach ?? "Không có tên")" class="product-image" />
-                                        <br />
-                                    }
+                                    <img src="/img/sach/@first.Sach.Hinh" alt="@(first.Sach.TenSach ?? "Không có tên")" class="product-image" />
+                                }
+                                if (item.ChiTietDonHangs.Count > 1)
+                                {
+                                    <span style="font-size: 12px; color: #888;">+@((item.ChiTietDonHangs.Count - 1)) ảnh</span>
                                 }
                             }
                             else
@@ -189,5 +192,9 @@
                 }
             </tbody>
         </table>
+        <div class="text-center mt-4">
+            @Html.PagedListPager(Model, page => Url.Action("DonHang", new { page }),
+                new PagedListRenderOptions { UlElementClasses = new[] { "pagination" } })
+        </div>
     }
 </div>

@@ -32,7 +32,17 @@
         <br />
         <h2>Danh sách nhân viên</h2>
 
-        <div class="my-3">
+        <div class="my-3 d-flex justify-content-between align-items-center">
+            <form class="admin-search-form" method="get" action="@Url.Action("Index")">
+                <select name="searchType" class="form-select">
+                    <option value="name" @(ViewBag.CurrentSearchType == "name" ? "selected" : "")>Tên nhân viên</option>
+                    <option value="id" @(ViewBag.CurrentSearchType == "id" ? "selected" : "")>Mã nhân viên</option>
+                </select>
+                <input type="text" name="searchString" class="form-control" placeholder="Tìm kiếm..." value="@(ViewBag.CurrentFilter ?? "")" />
+                <button type="submit" class="btn btn-outline-primary" title="Tìm kiếm">
+                    <i class="fa fa-search"></i>
+                </button>
+            </form>
             @Html.ActionLink("Thêm mới", "Create", null, new { @class = "btn btn-primary" })
         </div>
 
@@ -78,7 +88,7 @@
                     </tbody>
                 </table>
                 <div class="text-center">
-                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = ViewBag.CurrentFilter, searchType = ViewBag.CurrentSearchType }),
     new PagedListRenderOptions
     {
         UlElementClasses = new[] { "pagination", "justify-content-center" },

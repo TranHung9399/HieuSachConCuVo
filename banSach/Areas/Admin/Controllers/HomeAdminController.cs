@@ -27,6 +27,28 @@ namespace banSach.Areas.Admin.Controllers
                 }
 
                 ViewBag.HoTen = user.HoTen;
+                ViewBag.TongSach = db.Saches.Count();
+                ViewBag.TongKhachHang = db.KhachHangs.Count();
+                // Lấy 10 sách bán chạy nhất
+                var bestSellerIds = db.ChiTietDonHangs
+                    .Where(ct => ct.Sach.Status == 1)
+                    .GroupBy(ct => ct.MaSach)
+                    .Select(g => new {
+                        MaSach = g.Key,
+                        TotalSold = g.Sum(x => x.SoLuong)
+                    })
+                    .OrderByDescending(x => x.TotalSold)
+                    .Take(10)
+                    .ToList()
+                    .Select(x => x.MaSach)
+                    .ToList();
+                var bestSellerBooks = db.Saches
+                    .Where(s => bestSellerIds.Contains(s.MaSach))
+                    .ToList();
+                ViewBag.BestSellerBooks = bestSellerIds
+                    .Select(bookId => bestSellerBooks.FirstOrDefault(s => s.MaSach == bookId))
+                    .Where(s => s != null)
+                    .ToList();
 
                 // Tạo đối tượng ViewModel để lưu trữ thống kê
                 var thongKe = new ThongKeDonHang

@@ -42,7 +42,7 @@ namespace banSach.Controllers
                 // Kiểm tra email hoặc số điện thoại đã tồn tại
                 if (db.KhachHangs.Any(kh => kh.Email == khachHang.Email))
                 {
-                    TempData["Error"] = "Email đã được sử dụng.";
+                    TempData["Error"] = "Email đã tồn tại. Nếu bạn quên mật khẩu, bạn có thể <a href='" + Url.Action("ForgotPassword", "Dangnhap") + "' style='color:#1976d2;text-decoration:underline;'>thiết lập lại mật khẩu tại đây</a>.";
                     return View(khachHang);
                 }
 
