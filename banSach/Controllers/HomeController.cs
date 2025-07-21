@@ -74,5 +74,30 @@ namespace banSach.Controllers
         {
             return View();
         }
+
+        public ActionResult LienHe()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult SendContact(string name, string email, string message)
+        {
+            try
+            {
+                // Xử lý gửi email hoặc lưu vào database
+                // Ở đây có thể thêm logic gửi email thông báo
+                
+                TempData["ContactMessage"] = "Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi sớm nhất có thể.";
+                return RedirectToAction("LienHe");
+            }
+            catch (Exception ex)
+            {
+                TempData["ContactError"] = "Có lỗi xảy ra khi gửi liên hệ. Vui lòng thử lại sau.";
+                return RedirectToAction("LienHe");
+            }
+        }
+
+
     }
 }
